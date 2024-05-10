@@ -1,18 +1,4 @@
 class Pessoa {
-    id;
-    nome;
-    cpf;
-    dataNasc;
-    email;
-    data_cad;
-    genero;
-    logradouro;
-    bairro;
-    cidade;
-    estado;
-    numero;
-    complemento;
-    cep;
 
     constructor (Nome,cpf,DataNasc,Email,Data_cad,Genero,Logradouro,Bairro,Cidade,Estado,Numero,Complemento,Cep) {
         this.id = null;
@@ -149,9 +135,15 @@ class Pessoa {
     
         return strCPF;
     }
+
+    adicionarPessoa() {
+        'INSERT INTO.....'
+    }
     
 
 
 }
+
+
 
 module.exports = Pessoa
