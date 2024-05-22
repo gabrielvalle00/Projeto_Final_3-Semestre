@@ -1,9 +1,13 @@
 class Login {
 
     constructor(login,senha,status){
+        this.id = null;
         this.login = login;
         this.senha = senha;
         this.status = status;
+    }
+    get getId () {
+        return this.id;
     }
     getLogin(){
         return this.login;
@@ -24,3 +28,5 @@ class Login {
         this.status = status;
     }
 }
+
+module.exports = Login
