@@ -1,12 +1,15 @@
 const Pessoa = require('./pessoa');
 
-class Funcionario extends Pessoa() {
-    CRM;
-    data_Contrato;
-    constructor(Nome, cpf, DataNasc, Email, Data_cad, Genero, Logradouro, Bairro, Cidade, Estado, Numero, Complemento, Cep,CRM,data_Contrato) {
-        super(Nome, cpf, DataNasc, Email, Data_cad, Genero, Logradouro, Bairro, Cidade, Estado, Numero, Complemento, Cep)
+class Funcionario extends Pessoa {
+
+    constructor(Nome, cpf, DataNasc, Email, Data_cad, Genero,CRM,data_Contrato) {
+        super(Nome, cpf, DataNasc, Email, Data_cad, Genero)
+        this.id = null;
         this.CRM = CRM;
         this.data_Contrato = data_Contrato;
+    }
+    get getId () {
+        return this.id;
     }
     getCRM() {
         return this.CRM;
@@ -21,5 +24,7 @@ class Funcionario extends Pessoa() {
         this.data_Contrato = data;
     }
 }
+
+
 
 module.exports = Funcionario
