@@ -1,6 +1,6 @@
-class endereco {
+class Endereco {
     constructor(Logradouro,Bairro,Cidade,Estado,Numero,Complemento,Cep){
-        this.id = null;
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.Logradouro = Logradouro;
         this.Bairro = Bairro;
         this.Cidade = Cidade;

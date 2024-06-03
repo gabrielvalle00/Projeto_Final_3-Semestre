@@ -1,6 +1,6 @@
 class Telefone {
     constructor(numero){
-        this.id = null;
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.numero = numero;
     }
     get getId () {

@@ -1,7 +1,7 @@
 class Login {
 
-    constructor(login,senha,status){
-        this.id = null;
+    constructor(login,senha,status,idP,idPE){
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.login = login;
         this.senha = senha;
         this.status = status;

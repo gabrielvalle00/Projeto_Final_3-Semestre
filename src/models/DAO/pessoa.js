@@ -1,7 +1,7 @@
 class Pessoa {
 
     constructor (Nome,cpf,DataNasc,Email,Data_cad,Genero) {
-        this.id = null;
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.nome = Nome;
         this.cpf = cpf;
         this.DataConvert(DataNasc);

@@ -1,6 +1,6 @@
 class Especialidade {
     constructor(Especialidade){
-        this.id = null
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.Especialidade = Especialidade
     }
     get getId () {
