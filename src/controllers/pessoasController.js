@@ -1,6 +1,4 @@
-const Paciente = require('../models/DAO/paciente');
-const Funcionario = require('../models/DAO/funcionario');
-const Pessoa = require('../models/DAO/pessoa');
+const CRUD = require('../models/DAL/pessoasModel')
 const { insert } = require('../models/DAL/pessoasModel');
 
 

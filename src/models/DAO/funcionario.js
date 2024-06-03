@@ -2,9 +2,9 @@ const Pessoa = require('./pessoa');
 
 class Funcionario extends Pessoa {
 
-    constructor(Nome, cpf, DataNasc, Email, Data_cad, Genero,CRM,data_Contrato) {
+    constructor(Nome, cpf, DataNasc, Email, Data_cad, Genero,CRM,data_Contrato,idP,idPE) {
         super(Nome, cpf, DataNasc, Email, Data_cad, Genero)
-        this.id = null;
+        this.id = (id !== null || id > 0) ? pTel.id : null;
         this.CRM = CRM;
         this.data_Contrato = data_Contrato;
     }
