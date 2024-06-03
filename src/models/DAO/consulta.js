@@ -21,3 +21,6 @@ class Consulta {
         this.status = status;
     }
 }
+
+
+module.exports = Consulta

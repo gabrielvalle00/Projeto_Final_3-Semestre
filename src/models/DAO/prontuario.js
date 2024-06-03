@@ -20,3 +20,6 @@ class Prontuario {
         this.medicacao = medicacao;
     }
 }
+
+
+module.exports = Prontuario

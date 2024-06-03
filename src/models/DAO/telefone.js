@@ -13,3 +13,5 @@ class Telefone {
         this.numero = numero;
     }
 }
+
+module.exports = Telefone

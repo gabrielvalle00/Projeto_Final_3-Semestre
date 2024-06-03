@@ -13,3 +13,5 @@ class Especialidade {
         this.Especialidade = Especialidade
     }
 }
+
+module.exports = Especialidade

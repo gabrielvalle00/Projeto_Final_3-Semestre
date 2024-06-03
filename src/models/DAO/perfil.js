@@ -20,3 +20,5 @@ class Perfils  {
 
 }
 
+
+module.exports = Perfils
