@@ -14,3 +14,4 @@ class Paciente extends Pessoa {
 }
 
 
+module.exports = Paciente

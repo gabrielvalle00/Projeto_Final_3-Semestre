@@ -56,3 +56,6 @@ class Endereco {
         this.Cep = Cep;
     }
 }
+
+
+module.exports = Endereco
