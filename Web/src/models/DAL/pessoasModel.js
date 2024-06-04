@@ -1,4 +1,4 @@
-const conectarBancoDeDados = require('../config/db');
+const conectarBancoDeDados = require('../../config/db');
 
 async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, paciente, especialidade, login, perfis, consulta, prontuario,) {
     const connection = await conectarBancoDeDados();
@@ -23,10 +23,10 @@ async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, pacien
 
 
 
-        async (tefoneHas) => {
+        tefoneHas.forEach(async (tefoneHas) => {
             await connection.query('INSERT INTO tbl_telefone_has_pessoa (telefone_id, pessoa_id)VALUES (?, ?)', [tefoneHas.res[0].insertId, tefoneHas.res[0].insertId]);
 
-        }
+        });
 
 
 

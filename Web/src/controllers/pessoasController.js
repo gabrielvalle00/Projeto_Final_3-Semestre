@@ -1,5 +1,5 @@
 const CRUD = require('../models/DAL/pessoasModel')
-import Paciente from '../models/DAO/paciente';
+const Paciente = require('../models/DAO/paciente');
 const { insert } = require('../models/DAL/pessoasModel');
 
  
