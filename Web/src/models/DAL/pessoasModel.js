@@ -81,21 +81,6 @@ async function verificarCpfExistente(cpf) {
     }
 }
 
-<<<<<<< HEAD:src/models/DAL/pessoasModel.js
-async function insertModalidade(especialidade) {
-    try {
-        // Inicia a transação
-        await connection.beginTransaction();
-        // Executa a query de inserção
-        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
-        console.log('RESULTADO INSERT Especialidade =>', res);
-        // Faz o commit da transação
-        await connection.commit();
-    } catch (error) {
-        console.error('Erro ao inserir Especialidade:', error);
-        // Faz o rollback da transação em caso de erro
-        await connection.rollback();
-=======
 
 async function visualizarPaciente(id) {
     const connection = await conectarBancoDeDados();
@@ -120,18 +105,28 @@ async function visualizarFuncionario(id) {
         return (error);
     } finally {
         await connection.end(null);
->>>>>>> 774035d62b46178b649db31f9a0e7e616a7d1ff5:Web/src/models/DAL/pessoasModel.js
     }
 }
 
 
-<<<<<<< HEAD:src/models/DAL/pessoasModel.js
-module.exports = { insert, verificarCpfExistente,insertModalidade };
-=======
+async function insertModalidade(especialidade) {
+    try {
+        // Inicia a transação
+        await connection.beginTransaction();
+        // Executa a query de inserção
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
+        console.log('RESULTADO INSERT Especialidade =>', res);
+        // Faz o commit da transação
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao inserir Especialidade:', error);
+        // Faz o rollback da transação em caso de erro
+        await connection.rollback();
+    }
+}
 
 
 
 
 
-module.exports = { insert, verificarCpfExistente };
->>>>>>> 774035d62b46178b649db31f9a0e7e616a7d1ff5:Web/src/models/DAL/pessoasModel.js
+module.exports = { insert, verificarCpfExistente,insertModalidade,visualizarFuncionario };
