@@ -1,6 +1,6 @@
 const conectarBancoDeDados = require('../config/db');
 
-async function insert(funcionario, endereco, pessoa, telefone, paciente, especialidade, login, perfis, consulta, prontuario,) {
+async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, paciente, especialidade, login, perfis, consulta, prontuario,) {
     const connection = await conectarBancoDeDados();
     try {
 
@@ -10,9 +10,9 @@ async function insert(funcionario, endereco, pessoa, telefone, paciente, especia
         console.log('RESULTADO INSERT ENDERECO =>', res);
 
         //insert pessoa
-        pessoa.forEach(async (pessoa) => {
+        async (pessoa) => {
             await connection.query('INSERT INTO tbl_pessoa (cpf, nome, data_nasc, genero, email, endereco_id ) VALUES (?, ?, ?, ?, ?, ?)', [pessoa.cpf, pessoa.nome, pessoa.data_nasc, pessoa.genero, res[0].insertId]);
-        });
+        };
 
 
 
@@ -23,10 +23,28 @@ async function insert(funcionario, endereco, pessoa, telefone, paciente, especia
 
 
 
-        // Insert telefone
-        paciente.forEach(async (paciente) => {
-            await connection.query('INSERT INTO tbl_paciente (pessoa_id,) VALUES (?)', [res[0].insertId]);
-        });
+        async (tefoneHas) => {
+            await connection.query('INSERT INTO tbl_telefone_has_pessoa (telefone_id, pessoa_id)VALUES (?, ?)', [tefoneHas.res[0].insertId, tefoneHas.res[0].insertId]);
+
+        }
+
+
+
+
+        // Insert Paciente
+        async (paciente) => {
+            await connection.query('INSERT INTO tbl_paciente (pessoa_id) VALUES (?)', [res[0].insertId]);
+        };
+
+
+
+        // Insert funcionario
+        async (funcionario) => {
+            await connection.query('INSERT INTO tbl_funcionario (data_admissao, crm, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?)', [funcionario.data_Contrato, funcionario.crm, res[0].insertId, res[0].insertId]);
+
+        };
+
+
 
 
 
@@ -45,12 +63,11 @@ async function insert(funcionario, endereco, pessoa, telefone, paciente, especia
 
 }
 
-
 async function verificarCpfExistente(cpf) {
     const connection = await conectarBancoDeDados();
     try {
 
-        const res = await connection.query('select count(*) as total from tbl_cliente where cpf = (?)', [cpf]);
+        const res = await connection.query('select count(*) as total from tbl_pessoa where cpf = (?)', [cpf]);
         console.log(res);
         return res[0][0].total;
 
@@ -63,5 +80,38 @@ async function verificarCpfExistente(cpf) {
         await connection.end();
     }
 }
+
+
+async function visualizarPaciente(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        const [res] = await connection.query('SELECT * FROM tbl_paciente WHERE pessoa_id = ? ', [id]);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return (error);
+    } finally {
+        await connection.end(null);
+    }
+}
+
+async function visualizarFuncionario(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        const [res] = await connection.query('SELECT * FROM tbl_funcionario WHERE pessoa_id = ? ', [id]);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return (error);
+    } finally {
+        await connection.end(null);
+    }
+}
+
+
+
+
+
+
 
 module.exports = { insert, verificarCpfExistente };
