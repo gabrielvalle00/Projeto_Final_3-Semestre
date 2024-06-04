@@ -64,4 +64,21 @@ async function verificarCpfExistente(cpf) {
     }
 }
 
-module.exports = { insert, verificarCpfExistente };
+async function insertModalidade(especialidade) {
+    try {
+        // Inicia a transação
+        await connection.beginTransaction();
+        // Executa a query de inserção
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
+        console.log('RESULTADO INSERT Especialidade =>', res);
+        // Faz o commit da transação
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao inserir Especialidade:', error);
+        // Faz o rollback da transação em caso de erro
+        await connection.rollback();
+    }
+}
+
+
+module.exports = { insert, verificarCpfExistente,insertModalidade };
