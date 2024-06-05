@@ -1,11 +1,10 @@
-const Pessoa = require('./pessoa');
 
-class Funcionario extends Pessoa {
 
-    constructor(Nome, cpf, DataNasc, Email, Data_cad, Genero,CRM,data_Contrato,idP,idPE) {
-        super(Nome, cpf, DataNasc, Email, Data_cad, Genero)
-        this.id = (id !== null || id > 0) ? pTel.id : null;
-        this.CRM = CRM;
+class Funcionario  {
+
+    constructor(id,crm,data_Contrato,idP,idPE) {
+        this.id = (id !== null || id > 0) ? id : null;
+        this.crm = crm;
         this.data_Contrato = data_Contrato;
     }
     get getId () {

@@ -1,4 +1,5 @@
 const conectarBancoDeDados = require('../../config/db');
+const Endereco = require('../DAO/Endereco');
 
 async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, paciente, especialidade, login, perfis, consulta, prontuario,) {
     const connection = await conectarBancoDeDados();
@@ -6,7 +7,7 @@ async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, pacien
 
         await connection.beginTransaction();
 
-        const res = await connection.query('INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)', [endereco.logradouro, endereco.bairro, endereco.estado, endereco.numero, endereco.complemento, endereco.cep]);
+        const res = await connection.query('INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)', [Endereco.logradouro, Endereco.bairro, Endereco.estado, Endereco.numero, Endereco.complemento, Endereco.cep]);
         console.log('RESULTADO INSERT ENDERECO =>', res);
 
         //insert pessoa

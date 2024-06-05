@@ -1,6 +1,6 @@
 class Consulta {
-    constructor(data, hora, status,idP,idPP,idF,idPF) {
-        this.id = (id !== null || id > 0) ? pTel.id : null;
+    constructor(id,data, hora, status,idP,idPP,idF,idPF) {
+        this.id = (id !== null || id > 0) ? id : null;
         this.data = data;
         this.hora = hora;
         this.status = status;

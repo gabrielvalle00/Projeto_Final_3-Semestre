@@ -1,12 +1,11 @@
 class Pessoa {
 
-    constructor (Nome,cpf,DataNasc,Email,Data_cad,Genero) {
-        this.id = (id !== null || id > 0) ? pTel.id : null;
+    constructor (pid,Nome,cpf,DataNasc,Email,Genero) {
+        this.id = (pid !== null || pid > 0) ? id : null;
         this.nome = Nome;
         this.cpf = cpf;
         this.DataConvert(DataNasc);
         this.email = Email;
-        this.data_cad = Data_cad;
         this.genero = Genero;
         
     }
@@ -15,7 +14,7 @@ class Pessoa {
         return this.id;
     }
     get getNome () {
-        return this.nome;1
+        return this.nome;
     }
 
     get getCpf () {
@@ -88,12 +87,11 @@ class Pessoa {
     }
 
     DataConvert(value) {
-        let [dia, mes, ano] = value.split('/'); //       19/01/2002
+        let [dia, mes, ano] = value.split('/'); 
         let dataFormatada = `${ano}-${mes}-${dia}`;
-        this.Data_nasc = dataFormatada;
-      
+        this.dataNasc = dataFormatada;
     }
-    
+
 
 
 }
