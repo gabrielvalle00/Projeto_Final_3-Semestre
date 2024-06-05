@@ -1,61 +1,23 @@
 class Endereco {
-    constructor(Logradouro,Bairro,Cidade,Estado,Numero,Complemento,Cep){
-        this.id = (id !== null || id > 0) ? pTel.id : null;
-        this.Logradouro = Logradouro;
-        this.Bairro = Bairro;
-        this.Cidade = Cidade;
-        this.Estado = Estado;
-        this.Numero = Numero;
-        this.Complemento = Complemento;
-        this.Cep = Cep;
+    constructor(id, Logradouro, Bairro, Estado, NumeroEndereco, ComplementoEndereco, Cep) {
+        this.id = (id !== null && id > 0) ? id : null;
+        this.logradouro = Logradouro;
+        this.bairro = Bairro;
+        this.estado = Estado;
+        this.numeroEndereco = NumeroEndereco;
+        this.complementoEndereco = ComplementoEndereco;
+        this.cep = Cep;
     }
-    // get e set
-    get getId () {
-        return this.id;
-    }
-    get getLogradouro() {
-        return this.Logradouro;
-    }
-    get getBairro() {
-        return this.Logradouro
-    }
-    get getCidade() {
-        return this.Cidade
-    }
-    get getEstado() {
-        return this.Estado
-    }
-    get getNumero(){
-        return this.Numero
-    }
-    get getComplemento(){
-        return this.Complemento
-    }
-    get getCep(){
-        return this.Cep
-    }
-    set newLogradouro(Logradouro){
-        this.Logradouro = Logradouro;
-    }
-    set newBairro(Bairro){
-        this.Bairro = Bairro;
-    }
-    set newEstado(Estado){
-        this.Estado = Estado;
-    }
-    set newCidade(Cidade){
-        this.Cidade = Cidade;
-    }
-    set newNumero(Numero){
-        this.Numero = Numero;
-    }
-    set newComplemento(Complemento){
-        this.Complemento = Complemento;
-    }
-    set nerCep(Cep){
-        this.Cep = Cep;
-    }
-}
 
+    validaCampos(){
+        return(
+            this.logradouro&&
+            this.bairro&&
+            this.estado&&
+            this.numeroEndereco&&
+            this.cep
+        )
+    }
+};
 
 module.exports = Endereco

@@ -1,7 +1,7 @@
 class Perfils  {
-    constructor (login,senha,status,tipo){
+    constructor (id,login,senha,status,tipo){
         super (login,senha,status)
-        this.id = (id !== null || id > 0) ? pTel.id : null;
+        this.id = (id !== null || id > 0) ? id : null;
         this.tipo = tipo
     }
     get getId () {

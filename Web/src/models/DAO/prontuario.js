@@ -1,6 +1,6 @@
 class Prontuario {
-    constructor(diagnostico,medicacao){
-        this.id = (id !== null || id > 0) ? pTel.id : null;
+    constructor(id,diagnostico,medicacao){
+        this.id = (id !== null || id > 0) ? id : null;
         this.diagnostico = diagnostico;
         this.medicacao = medicacao;
     }

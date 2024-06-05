@@ -1,4 +1,5 @@
 const conectarBancoDeDados = require('../../config/db');
+const Endereco = require('../DAO/Endereco');
 
 async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, paciente, especialidade, login, perfis, consulta, prontuario,) {
     const connection = await conectarBancoDeDados();
@@ -6,7 +7,7 @@ async function insert(funcionario, endereco, pessoa, telefone, tefoneHas, pacien
 
         await connection.beginTransaction();
 
-        const res = await connection.query('INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)', [endereco.logradouro, endereco.bairro, endereco.estado, endereco.numero, endereco.complemento, endereco.cep]);
+        const res = await connection.query('INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)', [Endereco.logradouro, Endereco.bairro, Endereco.estado, Endereco.numero, Endereco.complemento, Endereco.cep]);
         console.log('RESULTADO INSERT ENDERECO =>', res);
 
         //insert pessoa
@@ -109,9 +110,24 @@ async function visualizarFuncionario(id) {
 }
 
 
+async function insertModalidade(especialidade) {
+    try {
+        // Inicia a transação
+        await connection.beginTransaction();
+        // Executa a query de inserção
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
+        console.log('RESULTADO INSERT Especialidade =>', res);
+        // Faz o commit da transação
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao inserir Especialidade:', error);
+        // Faz o rollback da transação em caso de erro
+        await connection.rollback();
+    }
+}
 
 
 
 
 
-module.exports = { insert, verificarCpfExistente };
+module.exports = { insert, verificarCpfExistente,insertModalidade,visualizarFuncionario };
