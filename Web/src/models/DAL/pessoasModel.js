@@ -1,21 +1,21 @@
 const conectarBancoDeDados = require('../../config/db');
 const Endereco = require('../DAO/Endereco');
 
-async function insert(funcionario, endereco, pessoa, telefones) {
+async function insert(funcionario, endereco, pessoa, telefones, login, perfil) {
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
 
         // Inserir Endereco
         const [resEndereco] = await connection.query(
-            'INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)', 
+            'INSERT INTO tbl_endereco (logradouro, bairro, estado, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?)',
             [endereco.logradouro, endereco.bairro, endereco.estado, endereco.numeroEndereco, endereco.complementoEndereco, endereco.cep]
         );
         const enderecoId = resEndereco.insertId;
 
         // Inserir Pessoa
         const [resPessoa] = await connection.query(
-            'INSERT INTO tbl_pessoa (cpf, nome, data_nasc, genero, email, endereco_id) VALUES (?, ?, ?, ?, ?, ?)', 
+            'INSERT INTO tbl_pessoa (cpf, nome, data_nasc, genero, email, endereco_id) VALUES (?, ?, ?, ?, ?, ?)',
             [pessoa.cpf, pessoa.nome, pessoa.dataNasc, pessoa.genero, pessoa.email, enderecoId]
         );
         const pessoaId = resPessoa.insertId;
@@ -23,33 +23,42 @@ async function insert(funcionario, endereco, pessoa, telefones) {
         // Inserir Telefones e associá-los à pessoa
         for (const tel of telefones) {
             const [resTelefone] = await connection.query(
-                'INSERT INTO tbl_telefone (numero) VALUES (?)', 
+                'INSERT INTO tbl_telefone (numero) VALUES (?)',
                 [tel.numeroTel]
             );
             const telefoneId = resTelefone.insertId;
 
             await connection.query(
-                'INSERT INTO tbl_pessoa_has_tbl_telefone (telefone_id, pessoa_id, pessoa_tbl_endereco_id) VALUES (?, ?, ?)', 
-
+                'INSERT INTO tbl_pessoa_has_tbl_telefone (telefone_id, pessoa_id, pessoa_tbl_endereco_id) VALUES (?, ?, ?)',
                 [telefoneId, pessoaId, enderecoId]
             );
         }
 
         // Inserir Funcionario
         await connection.query(
-            'INSERT INTO tbl_funcionario (data_admissao, crm, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?)', 
+            'INSERT INTO tbl_funcionario (data_admissao, crm, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?)',
             [funcionario.data_Contrato, funcionario.crm, pessoaId, enderecoId]
         );
 
-
         // Inserir Paciente
         await connection.query(
-            'INSERT INTO tbl_paciente (pessoa_id) VALUES (?)', 
+            'INSERT INTO tbl_paciente (pessoa_id) VALUES (?)',
             [pessoaId]
         );
 
+        // Inserir Login
+        const [resLogin] =await connection.query(
+            'INSERT INTO tbl_login (login, senha, status, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?, ?)',
+            [login.login, login.senha, login.status, pessoaId, enderecoId]
+        );
 
+        const loginId = resLogin.insertId;
 
+        // Inserir Perfil
+        await connection.query(
+            'INSERT INTO tbl_perfis (tipo, login_id, login_pessoa_id, login_pessoa_endereco_id) VALUES (?, ?, ?, ?)',
+            [perfil.tipo, loginId, pessoaId, enderecoId]
+        );
 
         await connection.commit();
         console.log('Transação concluída com sucesso.');
@@ -118,4 +127,65 @@ async function insertModalidade(especialidade) {
     }
 }
 
-module.exports = { insert, verificarCpfExistente, insertModalidade, visualizarFuncionario, visualizarPaciente };
+// CRUD para tbl_login
+
+async function visualizarLogin(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        const [res] = await connection.query('SELECT * FROM tbl_login WHERE id = ?', [id]);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function atualizarLogin(id, login) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query(
+            'UPDATE tbl_login SET login = ?, senha = ?, status = ? WHERE id = ?',
+            [login.login, login.senha, login.status, id]
+        );
+        console.log('RESULTADO UPDATE LOGIN =>', res);
+        await connection.commit();
+        return res;
+    } catch (error) {
+        console.error('Erro ao atualizar login:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function deletarLogin(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('DELETE FROM tbl_login WHERE id = ?', [id]);
+        console.log('RESULTADO DELETE LOGIN =>', res);
+        await connection.commit();
+        return res;
+    } catch (error) {
+        console.error('Erro ao deletar login:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+module.exports = {
+    insert,
+    verificarCpfExistente,
+    visualizarPaciente,
+    visualizarFuncionario,
+    insertModalidade,
+    visualizarLogin,
+    atualizarLogin,
+    deletarLogin
+};

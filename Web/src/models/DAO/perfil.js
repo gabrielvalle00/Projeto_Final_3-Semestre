@@ -1,6 +1,5 @@
 class Perfils  {
-    constructor (id,login,senha,status,tipo){
-        super (login,senha,status)
+    constructor (id,tipo){
         this.id = (id !== null || id > 0) ? id : null;
         this.tipo = tipo
     }
