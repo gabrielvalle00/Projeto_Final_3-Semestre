@@ -9,7 +9,6 @@ const clienteController = {
     adicionarCliente: async (req, res) => {
         try {
             const { cpf, nome, dataNasc, genero, email, endereco: [{ logradouro, bairro, estado, NumeroEndereco, ComplementoEndereco, cep }], telefone, funcionario: [{ data_Contrato, crm }] } = req.body;
-
             // Criar objeto Cliente (pessoa)
             const objCliente = new Pessoa(null,nome,cpf,dataNasc,email,genero);
             console.log(objCliente)         
@@ -24,7 +23,6 @@ const clienteController = {
             // Chamar a função insert com os dados processados
             const result = await insert(funcionario, objEndereco, objCliente, objTelefone);
             return res.json(result);
-
         } catch (error) {
             console.log(error);
             res.json(error);

@@ -115,7 +115,7 @@ async function insertModalidade(especialidade) {
         // Inicia a transação
         await connection.beginTransaction();
         // Executa a query de inserção
-        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade]);
         console.log('RESULTADO INSERT Especialidade =>', res);
         // Faz o commit da transação
         await connection.commit();
