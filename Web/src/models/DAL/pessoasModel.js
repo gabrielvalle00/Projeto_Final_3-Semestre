@@ -114,8 +114,9 @@ async function visualizarFuncionario(id) {
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
+        console.log('Oi',especialidade)
         await connection.beginTransaction();
-        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.desc_especialidade]);
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
         console.log('RESULTADO INSERT Especialidade =>', res);
         await connection.commit();
     } catch (error) {
