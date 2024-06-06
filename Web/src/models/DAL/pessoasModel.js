@@ -41,6 +41,16 @@ async function insert(funcionario, endereco, pessoa, telefones) {
             [funcionario.data_Contrato, funcionario.crm, pessoaId, enderecoId]
         );
 
+
+        // Inserir Paciente
+        await connection.query(
+            'INSERT INTO tbl_paciente (pessoa_id) VALUES (?)', 
+            [pessoaId]
+        );
+
+
+
+
         await connection.commit();
         console.log('Transação concluída com sucesso.');
         return { success: true, message: 'Cliente adicionado com sucesso' };
