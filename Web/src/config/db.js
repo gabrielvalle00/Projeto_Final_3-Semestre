@@ -10,7 +10,7 @@ async function conectarBancoDeDados() {
     const connection = await mysql2.createConnection({
         host: 'localhost',
         port: '3306',
-        database: 'db_clinica',
+        database: 'clinica',
         user: 'root',
         password: '1234',
         multipleStatements:true //permitir a execução de várias queries ao mesmo tempo

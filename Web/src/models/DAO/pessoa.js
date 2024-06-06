@@ -1,102 +1,64 @@
 class Pessoa {
-
-    constructor (pid,Nome,cpf,DataNasc,Email,Genero) {
-        this.id = (pid !== null || pid > 0) ? id : null;
+    constructor(pid, Nome, cpf, dataNasc, Email, Genero) {
+        this.id = pid !== null && pid > 0 ? pid : null;
         this.nome = Nome;
         this.cpf = cpf;
-        this.DataConvert(DataNasc);
+        this.dataNasc = this.DataConvert(dataNasc);
         this.email = Email;
         this.genero = Genero;
-        
     }
 
     get getId() {
         return this.id;
     }
-    get getNome () {
+
+    get getNome() {
         return this.nome;
     }
 
-    get getCpf () {
+    get getCpf() {
         return this.cpf;
     }
 
-    get getDataNasc () {
+    get getDataNasc() {
         return this.dataNasc;
     }
 
-    get getEmail () {
+    get getEmail() {
         return this.email;
     }
-    get getData_cad () {
-        return this.data_cad;
-    }
-    get getGenero () {
+
+    get getGenero() {
         return this.genero;
     }
 
-
-
-
-    set newName (Nome) {
+    set newName(Nome) {
         this.nome = Nome;
     }
-    set newCpf (cpf) {
+
+    set newCpf(cpf) {
         this.cpf = cpf;
     }
-    set newDataNasc (newBirthdate) {
-        this.dataNasc = newBirthdate;
+
+    set newDataNasc(newBirthdate) {
+        this.dataNasc = this.DataConvert(newBirthdate);
     }
-    set newEmail (email) {
+
+    set newEmail(email) {
         this.email = email;
     }
-    set newData_cad (data_cad){
-        this.data_cad = data_cad;
-    }
-    set newGenero (genero) {
+
+    set newGenero(genero) {
         this.genero = genero;
     }
 
-    // validarCPF(strCPF) {
-    //     var Soma;
-    //     var Resto;
-    //     Soma = 0;
-    //     if (strCPF == "00000000000") 
-    //     return "CPF Incompleto";
-    
-    //     for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-    //     Resto = (Soma * 10) % 11;
-    
-    //     if ((Resto == 10) || (Resto == 11)) Resto = 0;
-    //     if (Resto != parseInt(strCPF.substring(9, 10))) return "CPF Invalido!";
-    
-    //     Soma = 0;
-    //     for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-    //     Resto = (Soma * 10) % 11;
-    
-    //     if ((Resto == 10) || (Resto == 11)) Resto = 0;
-    //     if (Resto != parseInt(strCPF.substring(10, 11))) 
-        
-    //     return "Seu CPF está Invalido!";
-    
-    //     return strCPF;
-    // }
-
-    adicionarPessoa() {
-        'INSERT INTO.....'
-    }
-
     DataConvert(value) {
-        let [dia, mes, ano] = value.split('/'); 
-        let dataFormatada = `${ano}-${mes}-${dia}`;
-        this.dataNasc = dataFormatada;
+        if (value.includes('/')) {
+            let [dia, mes, ano] = value.split('/');
+            return `${ano}-${mes}-${dia}`;
+        }
+        return value; // Assuming value is already in YYYY-MM-DD format
     }
-
-
-
 }
 
-
-
-
-module.exports = Pessoa
+module.exports = Pessoa;
