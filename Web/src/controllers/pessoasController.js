@@ -4,6 +4,7 @@ const Funcionario = require('../models/DAO/Funcionario');
 const Telefone = require('../models/DAO/Telefone');
 const { insert } = require('../models/DAL/pessoasModel');
 
+
 const clienteController = {
     adicionarCliente: async (req, res) => {
         try {
@@ -30,6 +31,9 @@ const clienteController = {
             // Chamar a função insert com os dados processados
             const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone);
             return res.json(result);
+
+            
+
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Erro ao adicionar cliente' });
