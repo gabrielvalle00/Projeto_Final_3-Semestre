@@ -47,11 +47,10 @@ async function insert(funcionario, endereco, pessoa, telefones, login, perfil) {
         );
 
         // Inserir Login
-        const [resLogin] =await connection.query(
+        const [resLogin] = await connection.query(
             'INSERT INTO tbl_login (login, senha, status, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?, ?)',
             [login.login, login.senha, login.status, pessoaId, enderecoId]
         );
-
         const loginId = resLogin.insertId;
 
         // Inserir Perfil
@@ -114,7 +113,6 @@ async function visualizarFuncionario(id) {
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
-        console.log('Oi',especialidade)
         await connection.beginTransaction();
         const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
         console.log('RESULTADO INSERT Especialidade =>', res);
@@ -127,7 +125,6 @@ async function insertModalidade(especialidade) {
         await connection.end();
     }
 }
-
 
 // CRUD para tbl_login
 
@@ -181,6 +178,58 @@ async function deletarLogin(id) {
     }
 }
 
+// CRUD para tbl_pessoa
+
+async function visualizarPessoa(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        const [res] = await connection.query('SELECT * FROM tbl_pessoa WHERE id = ?', [id]);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function atualizarPessoa(id, pessoa) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query(
+            'UPDATE tbl_pessoa SET cpf = ?, nome = ?, data_nasc = ?, genero = ?, email = ? WHERE id = ?',
+            [pessoa.cpf, pessoa.nome, pessoa.dataNasc, pessoa.genero, pessoa.email, id]
+        );
+        console.log('RESULTADO UPDATE PESSOA =>', res);
+        await connection.commit();
+        return res;
+    } catch (error) {
+        console.error('Erro ao atualizar pessoa:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function deletarPessoa(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('DELETE FROM tbl_pessoa WHERE id = ?', [id]);
+        console.log('RESULTADO DELETE PESSOA =>', res);
+        await connection.commit();
+        return res;
+    } catch (error) {
+        console.error('Erro ao deletar pessoa:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
 module.exports = {
     insert,
     verificarCpfExistente,
@@ -189,5 +238,8 @@ module.exports = {
     insertModalidade,
     visualizarLogin,
     atualizarLogin,
-    deletarLogin
+    deletarLogin,
+    visualizarPessoa,
+    atualizarPessoa,
+    deletarPessoa
 };
