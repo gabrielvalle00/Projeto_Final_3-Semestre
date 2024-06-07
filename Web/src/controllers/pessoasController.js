@@ -4,8 +4,8 @@ const Funcionario = require('../models/DAO/Funcionario');
 const Telefone = require('../models/DAO/Telefone');
 const Login = require('../models/DAO/login');
 const Perfil = require('../models/DAO/perfil');
-
 const { insert } = require('../models/DAL/pessoasModel');
+
 
 
 const clienteController = {
@@ -38,11 +38,13 @@ const clienteController = {
             const objLogin = new Login(null, loginData.login, loginData.senha, 1 , null, null); 
             console.log(objLogin);
 
-            // Criar objeto Perfil
-            const [perfilData] = perfil; // Pegando o primeiro item do array
-            const objPerfil = new Perfil(null, perfilData.tipo, null, null, null);
-            console.log(objPerfil);
+           // Criar objeto Perfil
+           const [perfilData] = perfil; // Pegando o primeiro item do array
+           const objPerfil = new Perfil(null, perfilData.tipo, null, null, null);
+           console.log(objPerfil);
+    
 
+    
 
             // Chamar a função insert com os dados processados
             const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil);
