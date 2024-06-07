@@ -4,7 +4,8 @@ const Funcionario = require('../models/DAO/Funcionario');
 const Telefone = require('../models/DAO/Telefone');
 const Login = require('../models/DAO/login');
 const Perfil = require('../models/DAO/perfil');
-const { insert } = require('../models/DAL/pessoasModel');
+
+const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin, visualizarPessoa, atualizarPessoa, deletarPessoa } = require('../models/DAL/pessoasModel');
 
 
 
@@ -12,6 +13,10 @@ const clienteController = {
     adicionarCliente: async (req, res) => {
         try {
             const { cpf, nome, dataNasc, genero, email, endereco, telefone, funcionario, login, perfil } = req.body;
+            const cpfExistente = await verificarCpfExistente(cpf)
+            if (cpfExistente > 0) {
+                return res.json({ message: 'CPF ja cadastrado!' })
+            }
 
             // Criar objeto Cliente (pessoa)
             const objCliente = new Pessoa(null, nome, cpf, dataNasc, email, genero);
@@ -45,6 +50,7 @@ const clienteController = {
     
 
     
+
 
             // Chamar a função insert com os dados processados
             const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil);
