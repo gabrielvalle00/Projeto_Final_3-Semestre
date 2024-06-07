@@ -57,8 +57,10 @@ class Pessoa {
             let [dia, mes, ano] = value.split('/');
             return `${ano}-${mes}-${dia}`;
         }
-        return value; // Assuming value is already in YYYY-MM-DD format
+        return value; 
     }
+
+    
 }
 
 module.exports = Pessoa;

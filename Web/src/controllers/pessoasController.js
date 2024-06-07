@@ -5,13 +5,17 @@ const Telefone = require('../models/DAO/Telefone');
 const Login = require('../models/DAO/login');
 const Perfil = require('../models/DAO/perfil');
 
-const { insert } = require('../models/DAL/pessoasModel');
+const { insert , verificarCpfExistente} = require('../models/DAL/pessoasModel');
 
 
 const clienteController = {
     adicionarCliente: async (req, res) => {
         try {
             const { cpf, nome, dataNasc, genero, email, endereco, telefone, funcionario, login, perfil } = req.body;
+            const cpfExistente = await verificarCpfExistente(cpf)
+            if (cpfExistente > 0) {
+                return res.json({ message: 'CPF ja cadastrado!' })
+            }
 
             // Criar objeto Cliente (pessoa)
             const objCliente = new Pessoa(null, nome, cpf, dataNasc, email, genero);
@@ -42,6 +46,7 @@ const clienteController = {
             const [perfilData] = perfil; // Pegando o primeiro item do array
             const objPerfil = new Perfil(null, perfilData.tipo, null, null, null);
             console.log(objPerfil);
+
 
 
             // Chamar a função insert com os dados processados

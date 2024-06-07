@@ -128,6 +128,7 @@ async function insertModalidade(especialidade) {
     }
 }
 
+
 // CRUD para tbl_login
 
 async function visualizarLogin(id) {
