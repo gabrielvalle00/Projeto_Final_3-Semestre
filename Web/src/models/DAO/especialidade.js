@@ -1,7 +1,7 @@
 class Especialidade {
-    constructor(id, Especialidade) {
+    constructor(id, desc_especialidade) {
         this.id = (id !== null && id > 0) ? id : null;
-        this.Especialidade = Especialidade;
+        this.desc_especialidade = desc_especialidade;
     }
     get getId() {
         return this.id;
@@ -9,9 +9,7 @@ class Especialidade {
     get getEspecialidade() {
         return this.Especialidade;
     }
-    set newEspecialidade(Especialidade) {
-        this.Especialidade = Especialidade;
-    }
+
 }
 
 module.exports = Especialidade;

@@ -1,7 +1,7 @@
 const conectarBancoDeDados = require('../../config/db');
 const Endereco = require('../DAO/Endereco');
 
-async function insert(funcionario, endereco, pessoa, telefones, login, perfil) {
+async function insert(funcionario, endereco, pessoa, telefones, login, perfil, especialidade) {
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
@@ -33,12 +33,28 @@ async function insert(funcionario, endereco, pessoa, telefones, login, perfil) {
                 [telefoneId, pessoaId, enderecoId]
             );
         }
-
         // Inserir Funcionario
-        await connection.query(
-            'INSERT INTO tbl_funcionario (data_admissao, crm, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?)',
-            [funcionario.data_Contrato, funcionario.crm, pessoaId, enderecoId]
-        );
+        if (funcionario.data_Contrato !== null) {
+            console.log(funcionario.crm)
+            const [resFunc] = await connection.query(
+                'INSERT INTO tbl_funcionario (data_admissao, crm, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?)',
+                [funcionario.data_Contrato, funcionario.crm, pessoaId, enderecoId]
+            );
+            const funcID = resFunc.insertId;
+            console.log('pooi')
+            console.log(especialidade[0].desc_especialidade)
+            const idEspe = await connection.query(
+                'select id from clinica.tbl_especialidade where desc_especialidade = ? limit 1; ',[especialidade[0].desc_especialidade]
+            )
+            console.log(idEspe)
+            if (funcionario.crm !== null) {
+                await connection.query(
+                    'INSERT INTO tbl_funcionario_has_tbl_especialidade (funcionario_id, funcionario_pessoa_id, funcionario_pessoa_endereco_id, especialidade_id) VALUES (?, ?, ?, ?)',
+                    [funcID,pessoaId, enderecoId, idEspe[0][0].id]
+                )
+            }
+
+        }
 
         // Inserir Paciente
         await connection.query(
@@ -113,8 +129,9 @@ async function visualizarFuncionario(id) {
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
+
         await connection.beginTransaction();
-        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.Especialidade]);
+        const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.desc_especialidade]);
         console.log('RESULTADO INSERT Especialidade =>', res);
         await connection.commit();
     } catch (error) {
