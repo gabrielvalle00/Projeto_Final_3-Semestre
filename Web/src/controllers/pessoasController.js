@@ -3,6 +3,7 @@ const Endereco = require('../models/DAO/Endereco');
 const Funcionario = require('../models/DAO/Funcionario');
 const Telefone = require('../models/DAO/Telefone');
 const Login = require('../models/DAO/login');
+const Especialidade = require('../models/DAO/Especialidade')
 const Perfil = require('../models/DAO/perfil');
 
 const { insert , verificarCpfExistente} = require('../models/DAL/pessoasModel');
@@ -11,7 +12,7 @@ const { insert , verificarCpfExistente} = require('../models/DAL/pessoasModel');
 const clienteController = {
     adicionarCliente: async (req, res) => {
         try {
-            const { cpf, nome, dataNasc, genero, email, endereco, telefone, funcionario, login, perfil } = req.body;
+            const { cpf, nome, dataNasc, genero, email, endereco, telefone, funcionario, login, perfil,especialidade } = req.body;
             const cpfExistente = await verificarCpfExistente(cpf)
             if (cpfExistente > 0) {
                 return res.json({ message: 'CPF ja cadastrado!' })
@@ -25,10 +26,13 @@ const clienteController = {
             const [enderecoData] = endereco; // Pegando o primeiro item do array
             const objEndereco = new Endereco(null, enderecoData.logradouro, enderecoData.bairro, enderecoData.estado, enderecoData.numeroEndereco, enderecoData.complementoEndereco, enderecoData.cep);
             console.log(objEndereco);
-
-            // Criar array de objetos Telefone
-            const objTelefone = telefone.map(tel => new Telefone(null, tel.numeroTel));
-            console.log(objTelefone);
+            const objTelefone = []
+            if(telefone.length > 0){
+                telefone.forEach(value =>{
+                    objTelefone.push(new Telefone(null, value.numeroTel))
+                })
+            }
+            console.log(objTelefone)
 
             // Criar objeto Funcionario
             const [funcionarioData] = funcionario; // Pegando o primeiro item do array
@@ -48,9 +52,19 @@ const clienteController = {
             console.log(objPerfil);
 
 
+            console.log(Especialidade)
+            console.log(especialidade)
+            const objEspecialidade = []
+            if(especialidade.length > 0){
+                especialidade.forEach(value =>{
+                    objEspecialidade.push( new Especialidade(null, value.desc_especialidade))
+                })
+            }
+            console.log(objEspecialidade)
+
 
             // Chamar a função insert com os dados processados
-            const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil);
+            const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil,objEspecialidade);
             return res.json(result);
 
 
