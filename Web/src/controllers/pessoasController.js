@@ -60,6 +60,8 @@ const clienteController = {
                     objEspecialidade.push( new Especialidade(null, value.desc_especialidade))
                 })
             }
+            
+      
             console.log(objEspecialidade)
 
 
