@@ -1,42 +1,28 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
-export default function CustomDrawer(props) {
+const CustomDrawer = (props) => {
     return (
         <DrawerContentScrollView {...props}>
-            <View style={styles.headerContainer}>
-                <Image
-                    source={require('../assets/steam.jpg')}
-                    style={styles.profileImage}
-                />
-                <Text style={styles.profileText}>Gabriel Valle</Text>
-                <Text style={styles.roleText}>Administrador</Text>
+            <View style={styles.drawerHeader}>
+                <Text style={styles.drawerHeaderText}>Bem-vindo!</Text>
             </View>
             <DrawerItemList {...props} />
         </DrawerContentScrollView>
     );
-}
+};
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        alignItems: 'center',
-        marginTop: 20,
+    drawerHeader: {
+        padding: 20,
+        backgroundColor: '#f5f5f5',
         marginBottom: 20,
     },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
-    profileText: {
-        marginTop: 10,
-        fontSize: 18,
+    drawerHeaderText: {
+        fontSize: 20,
         fontWeight: 'bold',
     },
-    roleText: {
-        marginTop: 5,
-        fontSize: 14,
-        opacity: 0.6,
-    },
 });
+
+export default CustomDrawer;
