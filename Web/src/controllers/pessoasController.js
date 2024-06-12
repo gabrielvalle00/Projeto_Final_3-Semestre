@@ -6,7 +6,8 @@ const Login = require('../models/DAO/login');
 const Especialidade = require('../models/DAO/Especialidade')
 const Perfil = require('../models/DAO/perfil');
 
-const { insert , verificarCpfExistente} = require('../models/DAL/pessoasModel');
+const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin, visualizarPessoa, atualizarPessoa, deletarPessoa } = require('../models/DAL/pessoasModel');
+
 
 
 const clienteController = {
@@ -46,11 +47,13 @@ const clienteController = {
             const objLogin = new Login(null, loginData.login, loginData.senha, 1 , null, null); 
             console.log(objLogin);
 
-            // Criar objeto Perfil
-            const [perfilData] = perfil; // Pegando o primeiro item do array
-            const objPerfil = new Perfil(null, perfilData.tipo, null, null, null);
-            console.log(objPerfil);
+           // Criar objeto Perfil
+           const [perfilData] = perfil; // Pegando o primeiro item do array
+           const objPerfil = new Perfil(null, perfilData.tipo, null, null, null);
+           console.log(objPerfil);
+    
 
+    
 
             console.log(Especialidade)
             console.log(especialidade)
@@ -68,10 +71,6 @@ const clienteController = {
             // Chamar a função insert com os dados processados
             const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil,objEspecialidade);
             return res.json(result);
-
-
-            
-
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Erro ao adicionar cliente' });

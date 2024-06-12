@@ -79,7 +79,6 @@ async function insert(funcionario, endereco, pessoa, telefones, login, perfil, e
             'INSERT INTO tbl_login (login, senha, status, pessoa_id, pessoa_endereco_id) VALUES (?, ?, ?, ?, ?)',
             [login.login, login.senha, login.status, pessoaId, enderecoId]
         );
-
         const loginId = resLogin.insertId;
 
         // Inserir Perfil
@@ -142,7 +141,7 @@ async function visualizarFuncionario(id) {
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
-        console.log('Oi', especialidade)
+
         await connection.beginTransaction();
         const [res] = await connection.query('INSERT INTO tbl_especialidade (desc_especialidade) VALUES (?)', [especialidade.desc_especialidade]);
         console.log('RESULTADO INSERT Especialidade =>', res);
@@ -155,7 +154,6 @@ async function insertModalidade(especialidade) {
         await connection.end();
     }
 }
-
 
 // CRUD para tbl_login
 
@@ -229,9 +227,7 @@ async function criarConsulta(consulta) {
         console.error('Erro ao criar consulta:', error);
         throw error;
     } finally {
-
         await connection.end();
-
     }
 }
 
