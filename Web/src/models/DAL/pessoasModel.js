@@ -43,16 +43,28 @@ async function insert(funcionario, endereco, pessoa, telefones, login, perfil, e
             const funcID = resFunc.insertId;
             console.log('pooi')
             console.log(especialidade[0].desc_especialidade)
-            const idEspe = await connection.query(
-                'select id from clinica.tbl_especialidade where desc_especialidade = ? limit 1; ',[especialidade[0].desc_especialidade]
-            )
-            console.log(idEspe)
-            if (funcionario.crm !== null) {
-                await connection.query(
-                    'INSERT INTO tbl_funcionario_has_tbl_especialidade (funcionario_id, funcionario_pessoa_id, funcionario_pessoa_endereco_id, especialidade_id) VALUES (?, ?, ?, ?)',
-                    [funcID,pessoaId, enderecoId, idEspe[0][0].id]
-                )
+
+            for (const espe of especialidade) {
+                const [rows] = await connection.query(
+                    'SELECT id FROM clinica.tbl_especialidade WHERE desc_especialidade = ? LIMIT 1;', [espe.desc_especialidade]
+                );
+
+                if (rows.length > 0) {
+                    const idEspe = rows[0].id;
+                    console.log(idEspe);
+
+                    if (funcionario.crm !== null) {
+                        await connection.query(
+                            'INSERT INTO tbl_funcionario_has_tbl_especialidade (funcionario_id, funcionario_pessoa_id, funcionario_pessoa_endereco_id, especialidade_id) VALUES (?, ?, ?, ?)',
+                            [funcID, pessoaId, enderecoId, idEspe]
+                        );
+                    }
+                } else {
+                    console.log(`Especialidade ${espe.desc_especialidade} não encontrada.`);
+                }
             }
+
+
 
         }
 
@@ -186,6 +198,7 @@ async function deletarLogin(id) {
         console.log('RESULTADO DELETE LOGIN =>', res);
         await connection.commit();
         return res;
+
     } catch (error) {
         console.error('Erro ao deletar login:', error);
         await connection.rollback();
@@ -195,52 +208,23 @@ async function deletarLogin(id) {
     }
 }
 
-// CRUD para tbl_pessoa
 
-async function visualizarPessoa(id) {
-    const connection = await conectarBancoDeDados();
-    try {
-        const [res] = await connection.query('SELECT * FROM tbl_pessoa WHERE id = ?', [id]);
-        return res;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    } finally {
-        await connection.end();
-    }
-}
 
-async function atualizarPessoa(id, pessoa) {
+// Crud para tbl Consulta
+
+async function criarConsulta(consulta) {
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
-        const [res] = await connection.query(
-            'UPDATE tbl_pessoa SET cpf = ?, nome = ?, data_nasc = ?, genero = ?, email = ? WHERE id = ?',
-            [pessoa.cpf, pessoa.nome, pessoa.dataNasc, pessoa.genero, pessoa.email, id]
-        );
-        console.log('RESULTADO UPDATE PESSOA =>', res);
+        const [res] = await connection.query(`
+            INSERT INTO tbl_consulta (data, hora, status, paciente_id, paciente_pessoa_id, funcionario_id,funcionario_pessoa_id, especialidade_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `,[consulta.data, consulta.hora, consulta.status, consulta.paciente_id, consulta.paciente_pessoa_id, consulta.funcionario_id,consulta.funcionario_pessoa_id, consulta.especialidade_id]);
         await connection.commit();
-        return res;
+        return res; 
+   
     } catch (error) {
-        console.error('Erro ao atualizar pessoa:', error);
-        await connection.rollback();
-        throw error;
-    } finally {
-        await connection.end();
-    }
-}
-
-async function deletarPessoa(id) {
-    const connection = await conectarBancoDeDados();
-    try {
-        await connection.beginTransaction();
-        const [res] = await connection.query('DELETE FROM tbl_pessoa WHERE id = ?', [id]);
-        console.log('RESULTADO DELETE PESSOA =>', res);
-        await connection.commit();
-        return res;
-    } catch (error) {
-        console.error('Erro ao deletar pessoa:', error);
-        await connection.rollback();
+        console.error('Erro ao criar consulta:', error);
         throw error;
     } finally {
         await connection.end();
@@ -256,7 +240,5 @@ module.exports = {
     visualizarLogin,
     atualizarLogin,
     deletarLogin,
-    visualizarPessoa,
-    atualizarPessoa,
-    deletarPessoa
+    criarConsulta
 };

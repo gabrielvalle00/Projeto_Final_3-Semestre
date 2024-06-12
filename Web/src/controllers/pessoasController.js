@@ -63,16 +63,14 @@ const clienteController = {
                     objEspecialidade.push( new Especialidade(null, value.desc_especialidade))
                 })
             }
+            
+      
             console.log(objEspecialidade)
 
 
             // Chamar a função insert com os dados processados
             const result = await insert(objFuncionario, objEndereco, objCliente, objTelefone, objLogin, objPerfil,objEspecialidade);
             return res.json(result);
-
-
-            
-
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Erro ao adicionar cliente' });
