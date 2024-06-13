@@ -75,6 +75,19 @@ const clienteController = {
             console.log(error);
             res.status(500).json({ error: 'Erro ao adicionar cliente' });
         }
+    },
+
+    visualizarLogin: async (req, res) =>{
+        try {
+            const id = req.params.id;
+            console.log(id)
+            const obgLogin = new Login(id);
+            const result = await visualizarLogin(obgLogin);
+            res.status(200).json({ success: true, message: 'Especialidade adicionada com sucesso!', result });
+        } catch (error) {
+            console.error('Erro ao adicionar Especialidade:', error);
+            res.status(500).json({ success: false, message: 'Erro ao adicionar Especialidade', error });
+        }
     }
 };
 

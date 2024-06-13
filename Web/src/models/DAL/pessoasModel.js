@@ -160,7 +160,7 @@ async function insertModalidade(especialidade) {
 async function visualizarLogin(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_login WHERE id = ?', [id]);
+        const [res] = await connection.query('SELECT * FROM tbl_login WHERE id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -219,10 +219,36 @@ async function criarConsulta(consulta) {
         const [res] = await connection.query(`
             INSERT INTO tbl_consulta (data, hora, status, paciente_id, paciente_pessoa_id, funcionario_id,funcionario_pessoa_id, especialidade_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `,[consulta.data, consulta.hora, consulta.status, consulta.paciente_id, consulta.paciente_pessoa_id, consulta.funcionario_id,consulta.funcionario_pessoa_id, consulta.especialidade_id]);
+        `, [consulta.data, consulta.hora, consulta.status, consulta.paciente_id, consulta.paciente_pessoa_id, consulta.funcionario_id, consulta.funcionario_pessoa_id, consulta.especialidade_id]);
         await connection.commit();
-        return res; 
-   
+        return res;
+
+    } catch (error) {
+        console.error('Erro ao criar consulta:', error);
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+
+// Crud para tbl prontuario
+
+
+async function criarProntu(prontu) {
+    const connection = await conectarBancoDeDados()
+    try {
+        await connection.beginTransaction();
+
+        const tentativaID = await connection.query(`
+        select paciente_id, paciente_pessoa_id,funcionario_id,funcionario_pessoa_id, especialidade_id from tbl_consulta where id = ? 
+    `, [prontu.id_consulta]);
+        const [res] = await connection.query(`
+    INSERT INTO tbl_prontuario (diagnostico,medicacao,consulta_id,consulta_paciente_id,consulta_paciente_pessoa_id,consulta_funcionario_id,consulta_funcionario_pessoa_id,consulta_especialidade_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [prontu.diagnostico,prontu.medicacao,prontu.id_consulta,tentativaID[0][0].paciente_id,tentativaID[0][0].paciente_pessoa_id,tentativaID[0][0].funcionario_id,tentativaID[0][0].funcionario_pessoa_id,tentativaID[0][0].especialidade_id]);
+    await connection.commit();
+    return res;
     } catch (error) {
         console.error('Erro ao criar consulta:', error);
         throw error;
@@ -240,5 +266,6 @@ module.exports = {
     visualizarLogin,
     atualizarLogin,
     deletarLogin,
-    criarConsulta
+    criarConsulta,
+    criarProntu
 };
