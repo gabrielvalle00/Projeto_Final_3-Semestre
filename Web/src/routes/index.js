@@ -14,7 +14,11 @@ router.post('/cadastro/especialidades',EspecialidadeController.adicionarEspecial
 router.post('/nova/consulta',ConsultaController.criarConsulta)
 router.post('/cadastro/especialidades',EspecialidadeController.adicionarEspecialidade);
 router.post('/criar/prontuario',ProntuarioController.criarConsulta)  
-router.get('/criar/prontuario/:id',pessoasController.visualizarLogin) 
-
-
+router.get('/login/:id',pessoasController.visualizarLogin) 
+router.get('/paciente/:id',pessoasController.visualizarPaciente) 
+router.get('/funcionario/:id',pessoasController.visualizarFuncionario) 
+router.put('/alterar/login/:id',pessoasController.atualizarLogin)
+router.put('/alterar/consulta/:id',ConsultaController.editarConsulta)
+router.delete('/deletar/login/:id',pessoasController.deletarLogin)
+router.delete('/deletar/consulta/:id',ConsultaController.excluirConsulta)
 module.exports = router;

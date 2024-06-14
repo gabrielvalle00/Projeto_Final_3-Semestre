@@ -115,7 +115,7 @@ async function verificarCpfExistente(cpf) {
 async function visualizarPaciente(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_paciente WHERE pessoa_id = ?', [id]);
+        const [res] = await connection.query('SELECT * FROM tbl_pessoa WHERE id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -128,7 +128,7 @@ async function visualizarPaciente(id) {
 async function visualizarFuncionario(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_funcionario WHERE pessoa_id = ?', [id]);
+        const [res] = await connection.query('SELECT p.cpf, p.nome, p.data_nasc,  p.genero, p.email, p.data_cad, f.data_admissao, f.crm FROM  tbl_funcionario f JOIN tbl_pessoa p ON f.pessoa_id = p.id WHERE f.pessoa_id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -170,13 +170,14 @@ async function visualizarLogin(id) {
     }
 }
 
-async function atualizarLogin(id, login) {
+async function atualizarLogin(login) {
+
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
         const [res] = await connection.query(
             'UPDATE tbl_login SET login = ?, senha = ?, status = ? WHERE id = ?',
-            [login.login, login.senha, login.status, id]
+            [login.login, login.senha, login.status, login.id]
         );
         console.log('RESULTADO UPDATE LOGIN =>', res);
         await connection.commit();
@@ -191,10 +192,11 @@ async function atualizarLogin(id, login) {
 }
 
 async function deletarLogin(id) {
+
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
-        const [res] = await connection.query('DELETE FROM tbl_login WHERE id = ?', [id]);
+        const [res] = await connection.query('DELETE FROM tbl_login WHERE id = ?', [id.id]);
         console.log('RESULTADO DELETE LOGIN =>', res);
         await connection.commit();
         return res;
@@ -229,6 +231,36 @@ async function criarConsulta(consulta) {
     } finally {
         await connection.end();
     }
+}
+
+async function editarConsulta(consulta) {
+    const connection = await conectarBancoDeDados();
+try {
+    await connection.beginTransaction();
+    const [res] = await connection.query(`UPDATE tbl_consulta SET data = ?, hora = ?, status = ? WHERE id = ?`,[consulta.data, consulta.hora, consulta.status,consulta.id])
+    await connection.commit();
+    return res;
+} catch (error) {
+    console.error('Erro ao editar consulta:', error);
+    throw error;
+} finally {
+    await connection.end();
+}
+}
+
+ async function excluirConsulta(consulta) {
+    const connection = await conectarBancoDeDados();
+try {
+    await connection.beginTransaction();
+    const [res] = await connection.query(`DELETE FROM tbl_consulta WHERE id = ?`,[consulta.id])
+    await connection.commit();
+    return res;
+} catch (error) {
+    console.error('Erro ao excluir consulta:', error);
+    throw error;
+} finally {
+    await connection.end();
+}
 }
 
 
@@ -267,5 +299,7 @@ module.exports = {
     atualizarLogin,
     deletarLogin,
     criarConsulta,
-    criarProntu
+    criarProntu,
+    editarConsulta,
+    excluirConsulta
 };

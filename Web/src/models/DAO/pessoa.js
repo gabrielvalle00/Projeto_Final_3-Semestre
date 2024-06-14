@@ -1,11 +1,11 @@
 class Pessoa {
     constructor(pid, Nome, cpf, dataNasc, Email, Genero) {
         this.id = pid !== null && pid > 0 ? pid : null;
-        this.nome = Nome;
-        this.cpf = cpf;
-        this.dataNasc = this.DataConvert(dataNasc);
-        this.email = Email;
-        this.genero = Genero;
+        this.nome = Nome || '';
+        this.cpf = cpf || '';
+        this.dataNasc = dataNasc ? this.DataConvert(dataNasc) : null;
+        this.email = Email || '';
+        this.genero = Genero || '';
     }
 
     get getId() {
