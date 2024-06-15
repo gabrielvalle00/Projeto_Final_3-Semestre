@@ -112,10 +112,28 @@ async function verificarCpfExistente(cpf) {
     }
 }
 
+//Crud Pessoa
+
+async function updatePessoa(pessoa) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_pessoa SET cpf = ?, nome = ?, data_nasc = ?, genero = ?, email = ?,endereco_id = ? WHERE ID = ?',[pessoa.cpf,pessoa.nome,pessoa.dataNasc,pessoa.genero,pessoa.email,pessoa.endereco_id, pessoa.id] )
+        console.log('Update Pessoa realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Pessoa:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
 async function visualizarPaciente(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_paciente WHERE pessoa_id = ?', [id]);
+        const [res] = await connection.query('SELECT * FROM tbl_pessoa WHERE id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -124,11 +142,11 @@ async function visualizarPaciente(id) {
         await connection.end();
     }
 }
-
+//crud Funcionario
 async function visualizarFuncionario(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_funcionario WHERE pessoa_id = ?', [id]);
+        const [res] = await connection.query('SELECT p.cpf, p.nome, p.data_nasc,  p.genero, p.email, p.data_cad, f.data_admissao, f.crm FROM  tbl_funcionario f JOIN tbl_pessoa p ON f.pessoa_id = p.id WHERE f.pessoa_id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -138,6 +156,42 @@ async function visualizarFuncionario(id) {
     }
 }
 
+async function updateFuncionario(funci) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_funcionario SET data_admissao = ?, crm = ? WHERE ID = ?',[funci.data_Contrato,funci.crm, funci.id] )
+        console.log('Update Funcionario realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Funcionario:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+
+//Crud Endereco
+async function updateEndereco(endereco) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE ID = ?',[endereco.logradouro,endereco.bairro,endereco.estado,endereco.numeroEndereco,endereco.complemento,endereco.cep,endereco.id] )
+        console.log('Update Endereco realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Endereco:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+
+// Crud modalidade
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
@@ -155,12 +209,44 @@ async function insertModalidade(especialidade) {
     }
 }
 
+async function deleteModalidade(especialidade) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('DELETE FROM tbl_especialidade WHERE id = ?', [especialidade.id]);
+        console.log('RESULTADO DELETE Especialidade =>', res);
+        await connection.commit()
+    } catch (error) {
+        console.error('Erro ao Excluir Especialidade:', error);
+        await connection.rollback();
+        throw error;
+    } finally{
+        await connection.end();
+    }
+}
+
+async function updateModalidade(especialidade) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_especialidade SET desc_especialidade = ? WHERE ID = ?' ,[especialidade.desc_especialidade, especialidade.id]);
+        console.log('RESULTADO UPDATE Especialidade =>', res);
+        await connection.commit()
+    } catch (error) {
+        console.error('Erro ao editar Especialidade:', error);
+        await connection.rollback();
+        throw error;
+    }finally{
+        await connection.end();
+    }
+}
+
 // CRUD para tbl_login
 
 async function visualizarLogin(id) {
     const connection = await conectarBancoDeDados();
     try {
-        const [res] = await connection.query('SELECT * FROM tbl_login WHERE id = ?', [id]);
+        const [res] = await connection.query('SELECT * FROM tbl_login WHERE id = ?', [id.id]);
         return res;
     } catch (error) {
         console.log(error);
@@ -170,13 +256,14 @@ async function visualizarLogin(id) {
     }
 }
 
-async function atualizarLogin(id, login) {
+async function atualizarLogin(login) {
+
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
         const [res] = await connection.query(
             'UPDATE tbl_login SET login = ?, senha = ?, status = ? WHERE id = ?',
-            [login.login, login.senha, login.status, id]
+            [login.login, login.senha, login.status, login.id]
         );
         console.log('RESULTADO UPDATE LOGIN =>', res);
         await connection.commit();
@@ -191,10 +278,11 @@ async function atualizarLogin(id, login) {
 }
 
 async function deletarLogin(id) {
+
     const connection = await conectarBancoDeDados();
     try {
         await connection.beginTransaction();
-        const [res] = await connection.query('DELETE FROM tbl_login WHERE id = ?', [id]);
+        const [res] = await connection.query('DELETE FROM tbl_login WHERE id = ?', [id.id]);
         console.log('RESULTADO DELETE LOGIN =>', res);
         await connection.commit();
         return res;
@@ -219,10 +307,66 @@ async function criarConsulta(consulta) {
         const [res] = await connection.query(`
             INSERT INTO tbl_consulta (data, hora, status, paciente_id, paciente_pessoa_id, funcionario_id,funcionario_pessoa_id, especialidade_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `,[consulta.data, consulta.hora, consulta.status, consulta.paciente_id, consulta.paciente_pessoa_id, consulta.funcionario_id,consulta.funcionario_pessoa_id, consulta.especialidade_id]);
+        `, [consulta.data, consulta.hora, consulta.status, consulta.paciente_id, consulta.paciente_pessoa_id, consulta.funcionario_id, consulta.funcionario_pessoa_id, consulta.especialidade_id]);
         await connection.commit();
-        return res; 
-   
+        return res;
+
+    } catch (error) {
+        console.error('Erro ao criar consulta:', error);
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function editarConsulta(consulta) {
+    const connection = await conectarBancoDeDados();
+try {
+    await connection.beginTransaction();
+    const [res] = await connection.query(`UPDATE tbl_consulta SET data = ?, hora = ?, status = ? WHERE id = ?`,[consulta.data, consulta.hora, consulta.status,consulta.id])
+    await connection.commit();
+    return res;
+} catch (error) {
+    console.error('Erro ao editar consulta:', error);
+    throw error;
+} finally {
+    await connection.end();
+}
+}
+
+ async function excluirConsulta(consulta) {
+    const connection = await conectarBancoDeDados();
+try {
+    await connection.beginTransaction();
+    const [res] = await connection.query(`DELETE FROM tbl_consulta WHERE id = ?`,[consulta.id])
+    await connection.commit();
+    return res;
+} catch (error) {
+    console.error('Erro ao excluir consulta:', error);
+    throw error;
+} finally {
+    await connection.end();
+}
+}
+
+
+// Crud para tbl prontuario
+
+
+async function criarProntu(prontu) {
+    const connection = await conectarBancoDeDados()
+    try {
+        await connection.beginTransaction();
+
+        const id = await connection.query(`
+        select paciente_id, paciente_pessoa_id,funcionario_id,funcionario_pessoa_id, especialidade_id from tbl_consulta where id = ? 
+    `, [prontu.id_consulta]);
+        const [res] = await connection.query(`
+    INSERT INTO tbl_prontuario (diagnostico,medicacao,consulta_id,consulta_paciente_id,consulta_paciente_pessoa_id,consulta_funcionario_id,consulta_funcionario_pessoa_id,consulta_especialidade_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [prontu.diagnostico,prontu.medicacao,prontu.id_consulta,id[0][0].paciente_id,id[0][0].paciente_pessoa_id,id[0][0].funcionario_id,id[0][0].funcionario_pessoa_id,id[0][0].especialidade_id]);
+    await connection.commit();
+    return res;
     } catch (error) {
         console.error('Erro ao criar consulta:', error);
         throw error;
@@ -240,5 +384,13 @@ module.exports = {
     visualizarLogin,
     atualizarLogin,
     deletarLogin,
-    criarConsulta
+    criarConsulta,
+    criarProntu,
+    editarConsulta,
+    excluirConsulta,
+    deleteModalidade,
+    updateModalidade,
+    updateEndereco,
+    updatePessoa,
+    updateFuncionario
 };
