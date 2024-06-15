@@ -6,7 +6,7 @@ const Login = require('../models/DAO/login');
 const Especialidade = require('../models/DAO/Especialidade')
 const Perfil = require('../models/DAO/perfil');
 
-const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin, visualizarPessoa, atualizarPessoa, deletarPessoa } = require('../models/DAL/pessoasModel');
+const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin,updatePessoa } = require('../models/DAL/pessoasModel');
 
 
 
@@ -22,6 +22,10 @@ const clienteController = {
             // Criar objeto Cliente (pessoa)
             const objCliente = new Pessoa(null, nome, cpf, dataNasc, email, genero);
             console.log(objCliente);
+            const verificaCp = objCliente.validaCpf(objCliente.Cpf)
+            if(verificaCp !== true){
+            return res.json({message:"CPF INVALIDO"})
+            }
 
             // Criar objeto Endereco
             const [enderecoData] = endereco; // Pegando o primeiro item do array
@@ -131,6 +135,18 @@ const clienteController = {
             const obgLog = new Login(id);
             console.log(obgLog)
             const result = await deletarLogin(obgLog);
+            res.status(200).json({ success: true, result });
+        } catch (error) {
+            res.status(500).json({ success: false, error });
+        }
+    },
+    updatePessoa: async (req, res) =>{
+        try {
+            const id = req.params.id;
+            const {cpf,nome,dataNasc,genero,email,endereco_id} = req.body
+            const objPessoa = new Pessoa(id,nome,cpf,dataNasc,email,genero,endereco_id)
+            console.log(objPessoa)
+            const result = await updatePessoa(objPessoa);
             res.status(200).json({ success: true, result });
         } catch (error) {
             res.status(500).json({ success: false, error });

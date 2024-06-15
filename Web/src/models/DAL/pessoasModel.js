@@ -112,6 +112,24 @@ async function verificarCpfExistente(cpf) {
     }
 }
 
+//Crud Pessoa
+
+async function updatePessoa(pessoa) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_pessoa SET cpf = ?, nome = ?, data_nasc = ?, genero = ?, email = ?,endereco_id = ? WHERE ID = ?',[pessoa.cpf,pessoa.nome,pessoa.dataNasc,pessoa.genero,pessoa.email,pessoa.endereco_id, pessoa.id] )
+        console.log('Update Pessoa realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Pessoa:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
 async function visualizarPaciente(id) {
     const connection = await conectarBancoDeDados();
     try {
@@ -124,7 +142,7 @@ async function visualizarPaciente(id) {
         await connection.end();
     }
 }
-
+//crud Funcionario
 async function visualizarFuncionario(id) {
     const connection = await conectarBancoDeDados();
     try {
@@ -138,6 +156,42 @@ async function visualizarFuncionario(id) {
     }
 }
 
+async function updateFuncionario(funci) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_funcionario SET data_admissao = ?, crm = ? WHERE ID = ?',[funci.data_Contrato,funci.crm, funci.id] )
+        console.log('Update Funcionario realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Funcionario:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+
+//Crud Endereco
+async function updateEndereco(endereco) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE ID = ?',[endereco.logradouro,endereco.bairro,endereco.estado,endereco.numeroEndereco,endereco.complemento,endereco.cep,endereco.id] )
+        console.log('Update Endereco realizado', res)
+        await connection.commit();
+    } catch (error) {
+        console.error('Erro ao editar Endereco:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+
+// Crud modalidade
 async function insertModalidade(especialidade) {
     const connection = await conectarBancoDeDados();
     try {
@@ -151,6 +205,38 @@ async function insertModalidade(especialidade) {
         await connection.rollback();
         throw error;
     } finally {
+        await connection.end();
+    }
+}
+
+async function deleteModalidade(especialidade) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('DELETE FROM tbl_especialidade WHERE id = ?', [especialidade.id]);
+        console.log('RESULTADO DELETE Especialidade =>', res);
+        await connection.commit()
+    } catch (error) {
+        console.error('Erro ao Excluir Especialidade:', error);
+        await connection.rollback();
+        throw error;
+    } finally{
+        await connection.end();
+    }
+}
+
+async function updateModalidade(especialidade) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('UPDATE tbl_especialidade SET desc_especialidade = ? WHERE ID = ?' ,[especialidade.desc_especialidade, especialidade.id]);
+        console.log('RESULTADO UPDATE Especialidade =>', res);
+        await connection.commit()
+    } catch (error) {
+        console.error('Erro ao editar Especialidade:', error);
+        await connection.rollback();
+        throw error;
+    }finally{
         await connection.end();
     }
 }
@@ -272,13 +358,13 @@ async function criarProntu(prontu) {
     try {
         await connection.beginTransaction();
 
-        const tentativaID = await connection.query(`
+        const id = await connection.query(`
         select paciente_id, paciente_pessoa_id,funcionario_id,funcionario_pessoa_id, especialidade_id from tbl_consulta where id = ? 
     `, [prontu.id_consulta]);
         const [res] = await connection.query(`
     INSERT INTO tbl_prontuario (diagnostico,medicacao,consulta_id,consulta_paciente_id,consulta_paciente_pessoa_id,consulta_funcionario_id,consulta_funcionario_pessoa_id,consulta_especialidade_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `, [prontu.diagnostico,prontu.medicacao,prontu.id_consulta,tentativaID[0][0].paciente_id,tentativaID[0][0].paciente_pessoa_id,tentativaID[0][0].funcionario_id,tentativaID[0][0].funcionario_pessoa_id,tentativaID[0][0].especialidade_id]);
+    `, [prontu.diagnostico,prontu.medicacao,prontu.id_consulta,id[0][0].paciente_id,id[0][0].paciente_pessoa_id,id[0][0].funcionario_id,id[0][0].funcionario_pessoa_id,id[0][0].especialidade_id]);
     await connection.commit();
     return res;
     } catch (error) {
@@ -301,5 +387,10 @@ module.exports = {
     criarConsulta,
     criarProntu,
     editarConsulta,
-    excluirConsulta
+    excluirConsulta,
+    deleteModalidade,
+    updateModalidade,
+    updateEndereco,
+    updatePessoa,
+    updateFuncionario
 };
