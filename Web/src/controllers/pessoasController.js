@@ -2,11 +2,11 @@ const Pessoa = require('../models/DAO/Pessoa');
 const Endereco = require('../models/DAO/Endereco');
 const Funcionario = require('../models/DAO/Funcionario');
 const Telefone = require('../models/DAO/Telefone');
-const Login = require('../models/DAO/login');
+const Login = require('../models/DAO/Login');
 const Especialidade = require('../models/DAO/Especialidade')
-const Perfil = require('../models/DAO/perfil');
+const Perfil = require('../models/DAO/Perfil');
 
-const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin,updatePessoa } = require('../models/DAL/pessoasModel');
+const { insert, verificarCpfExistente, visualizarPaciente, visualizarFuncionario, visualizarLogin, atualizarLogin, deletarLogin,updatePessoa,deletarPessoa } = require('../models/DAL/PessoasModel');
 
 
 
@@ -151,7 +151,19 @@ const clienteController = {
         } catch (error) {
             res.status(500).json({ success: false, error });
         }
+    },
+    deletarPessoa: async (req, res) =>{
+        try {
+            const id = req.params.id;
+            const objPessoa = new Pessoa(id)
+            console.log(objPessoa)
+            const result = await deletarPessoa(objPessoa);
+            res.status(200).json({ success: true, result });
+        } catch (error) {
+            res.status(500).json({ success: false, error });
+        }
     }
+    
 }
 
 module.exports = clienteController;

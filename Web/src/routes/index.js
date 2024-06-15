@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const pessoasController = require('../controllers/pessoasController');
+const pessoasController = require('../controllers/PessoasController');
 const EspecialidadeController = require('../controllers/EspecialidadeController');
 const ConsultaController = require('../controllers/ConsultaController')
 const ProntuarioController = require('../controllers/ProntuarioController')
 const EnderecoController = require('../controllers/EnderecoController')
 const FuncionarioController = require('../controllers/FuncionarioController')
+const PerfilController = require('../controllers/PerfilController')
+const TelefoneController = require('../controllers/TelefoneController')
 
 
 
@@ -25,8 +27,16 @@ router.put('/alterar/especialidade/:id',EspecialidadeController.updateModalidade
 router.put('/alterar/endereco/:id',EnderecoController.updateEndereco)
 router.put('/alterar/pessoa/:id',pessoasController.updatePessoa)
 router.put('/alterar/funcionario/:id',FuncionarioController.updateFuncionario)
+router.put('/alterar/perfil/:id',PerfilController.atualizarPerfil)
+router.put('/alterar/telefone/:id',TelefoneController.updateTelefone) 
+router.put('/alterar/prontuario/:id',ProntuarioController.editarConsulta)
 router.delete('/deletar/login/:id',pessoasController.deletarLogin)
 router.delete('/deletar/consulta/:id',ConsultaController.excluirConsulta)
 router.delete('/deletar/modalidade/:id',EspecialidadeController.deleteModalidade)
+router.delete('/deletar/prontuario/:id',ProntuarioController.excluirProntu)
+router.delete('/deletar/endereco/:id',EnderecoController.deletarEndereco)
+router.delete('/deleter/telefone/:id',TelefoneController.deletarTelefone)
+router.delete('/deletar/pessoa/:id', pessoasController.deletarPessoa)
+router.delete('/deletar/funcionario/:id',FuncionarioController.deletarFuncionario)
 
 module.exports = router;
