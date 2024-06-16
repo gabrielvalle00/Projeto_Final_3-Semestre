@@ -1,0 +1,51 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Care</title>
+    <link rel="shortcut icon" type="imagex/png" href="../img/logo.png">
+    <link rel="stylesheet" href="../../../public/css/home.css">
+</head>
+
+<body>
+    <section>
+        <div class="circle"></div>
+        <header>
+            <a href="#"><img src="" class="logo"></a>
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="../pages/login.html">Login</a></li>
+                <li><a href="../pages/consulta.html">Consulta</a></li>
+            </ul>
+        </header>
+        <div class="content">
+            <div class="textBox">
+                <h2>Bem vindo ao <span>Medical Care</span></h2>
+                <p>Estamos entusiasmados em apresentar o Medical Care, a nova plataforma de cuidados médicos,
+                    desenvolvido para oferecer a você um atendimento mais eficiente, personalizado e acessível. Com o
+                    Medical Care, você tem o hospital ao seu alcance, onde e quando precisar.</p>
+                <a href="../pages/login.html">Login</a>
+            </div>
+            <div class="imgBox">
+                <img src="../../../public/images/medica.png" class="medico">
+            </div>
+        </div>
+
+    </section>
+
+    <script type="text/javascript">
+        function imgSlider(anything) {
+            document.querySelector('.medicalgroup').src = anything;
+        }
+        function changeCircleColor(color) {
+            const circle = document.querySelector('.circle');
+            circle.style.background = color;
+        }
+
+    </script>
+
+</body>
+
+</html>
