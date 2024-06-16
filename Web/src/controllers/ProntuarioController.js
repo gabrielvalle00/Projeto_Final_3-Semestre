@@ -2,7 +2,7 @@ const Prontuario = require('../models/DAO/Prontuario')
 const { criarProntu, editarProntu,excluirProntu} = require('../models/DAL/PessoasModel');
 
 const ProntuarioController = {
-    criarConsulta: async (req,res) => {
+    criarProntu: async (req,res) => {
         try{
             const {diagnostico,medicacao,id_consulta} = req.body
             const objProntu = new Prontuario (null, diagnostico,medicacao,id_consulta)
@@ -14,7 +14,7 @@ const ProntuarioController = {
             res.status(500).json({ success: false, message: 'Erro ao criar prontuario', error });
         }
     },
-    editarConsulta: async (req,res) => {
+    editarProntu: async (req,res) => {
         try{
             const id = req.params.id
             const {diagnostico,medicacao} = req.body

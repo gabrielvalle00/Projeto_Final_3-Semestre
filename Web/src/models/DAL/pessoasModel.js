@@ -206,6 +206,25 @@ async function deletarFuncionario(id) {
     }
 }
 
+// Crud Perfil
+
+async function deletarPerfil(id) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query('DELETE FROM tbl_perfis WHERE id = ?', [id.id]);
+        console.log('RESULTADO DELETE perfil =>', res);
+        await connection.commit();
+        return res;
+    } catch (error) {
+        console.error('Erro ao deletar perfil:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
 
 //Crud Endereco
 async function updateEndereco(endereco) {
@@ -271,6 +290,35 @@ async function deletarTelefone(id) {
         return res;
     } catch (error) {
         console.error('Erro ao deletar telefone:', error);
+        await connection.rollback();
+        throw error;
+    } finally {
+        await connection.end();
+    }
+}
+
+async function adicionarTelefone(id,telefone) {
+    const connection = await conectarBancoDeDados();
+    try {
+        await connection.beginTransaction();
+        const [resTelefone] = await connection.query(
+            'INSERT INTO tbl_telefone (numero) VALUES (?)',
+            [telefone.numeroTel]
+        );
+        const telefoneId = resTelefone.insertId;
+        const ids = await connection.query(`
+            select endereco_id from tbl_pessoa where id = ? 
+        `, [id]);
+        const enderecoId = ids[0][0].endereco_id;
+        await connection.query(
+            'INSERT INTO tbl_pessoa_has_tbl_telefone (telefone_id, pessoa_id, pessoa_tbl_endereco_id) VALUES (?, ?, ?)',
+            [telefoneId, id, enderecoId]
+        );
+        console.log('RESULTADO INSERT Telefone =>', resTelefone);
+        await connection.commit();
+        return resTelefone;
+    } catch (error) {
+        console.error('Erro ao inserir telefone:', error);
         await connection.rollback();
         throw error;
     } finally {
@@ -541,5 +589,7 @@ module.exports = {
     deletarEndereco,
     deletarTelefone,
     deletarPessoa,
-    deletarFuncionario
+    deletarFuncionario,
+    adicionarTelefone,
+    deletarPerfil
 };
