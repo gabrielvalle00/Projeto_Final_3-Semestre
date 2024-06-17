@@ -1,4 +1,4 @@
-const { criarConsulta,editarConsulta,excluirConsulta } = require('../models/DAL/pessoasModel');
+const { criarConsulta,editarConsulta,excluirConsulta } = require('../models/DAL/PessoasModel');
 const Consulta = require('../models/DAO/Consulta');
 
 

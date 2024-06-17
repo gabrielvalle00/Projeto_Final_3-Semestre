@@ -1,4 +1,4 @@
-const { insertModalidade,deleteModalidade,updateModalidade } = require('../models/DAL/pessoasModel');
+const { insertModalidade,deleteModalidade,updateModalidade } = require('../models/DAL/PessoasModel');
 const Especialidade = require('../models/DAO/Especialidade')
 
 const EspecialidadeController = {
