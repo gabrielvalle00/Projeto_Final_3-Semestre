@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>consulta</title>
+  <link rel="stylesheet" href="../../../public/css/consulta.css">
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <span>Cadastro de Registros</span>
+      <button onclick="openModal()" id="new">Incluir</button>
+      <button onclick="openProntuario()" id="prontuario">Prontuário</button>
+    </div>
+
+    <div class="divTable">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome do paciente</th>
+            <th>Nome do medico</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Especialidade</th>
+            <th class="acao">Editar</th>
+            <th class="acao">Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-container">
+      <div class="modal">
+        <form>
+          <label for="m-nomePaciente">Nome do paciente</label>
+          <input id="m-nomePaciente" type="text" required />
+
+          <label for="m-nomeMedico">Nome do medico</label>
+          <input id="m-nomeMedico" type="text" required />
+
+          <label for="m-data">Data</label>
+          <input id="m-data" type="date" required />
+
+          <label for="m-hora">Hora</label>
+          <input id="m-hora" type="time" required />
+
+          <label for="m-status">Status</label>
+          <input id="m-status" type="text" required />
+
+          <label for="m-especialidade">Especialidade</label>
+          <input id="m-especialidade" type="text" required />
+          <button id="btnSalvar">Salvar</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <script src="../../../js/consulta/script.js"></script>
+</body>
+
+<script>
+  const modal = document.querySelector('.modal-container');
+
+</script>
+
+</html>
